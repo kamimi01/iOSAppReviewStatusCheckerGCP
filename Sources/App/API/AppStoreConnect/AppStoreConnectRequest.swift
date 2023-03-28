@@ -7,14 +7,7 @@
 
 import Foundation
 
-protocol AppStoreConnectRequest {
-    associatedtype Response: Decodable
-    var baseURL: URL { get }
-    var method: HttpMethod { get }
-    var path: String { get }
-    var headerFields: [String: String] { get }
-    var queryParameters: [String: String]? { get }
-}
+protocol AppStoreConnectRequest: Request {}
 
 extension AppStoreConnectRequest {
     var baseURL: URL {

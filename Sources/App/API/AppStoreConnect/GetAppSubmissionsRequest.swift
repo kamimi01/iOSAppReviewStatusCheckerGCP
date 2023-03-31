@@ -15,7 +15,7 @@ struct GetAppSubmissionsRequest: AppStoreConnectRequest {
     let path = "/reviewSubmissions"
 
     var headerFields: [String : String] {
-        return ["Authorization": "<JWT>"]
+        return ["Authorization": "eyJraWQiOiJKTlpDNDM0NVFOIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiI5NmQ4ZGIyYS02NDk2LTQyYjAtOTNjZi0zZjY4NGQxYzQyZmYiLCJleHAiOjE2ODAyNjk1MDksImF1ZCI6ImFwcHN0b3JlY29ubmVjdC12MSJ9.oCWAMHOzdrAQw4s8eF055404LtUGr2TOGkJg4mYpbTTo-DVCvh7QxIfyb1XXkwBQKRs7zm9L9Xo-45kEE93QuQ"]
     }
 
     var queryParameters: [String : String]? {

@@ -10,18 +10,19 @@ import JWT
 
 struct Payload: JWTPayload {
     enum CodingKeys: String, CodingKey {
-        case issue = "iss"
-        case issuedAtClaim = "isa"
+        case issuer = "iss"
+        case issuedAtClaim = "ias"
         case expiration = "exp"
         case audience = "aud"
     }
 
-    var issue: IssuerClaim
+    var issuer: IssuerClaim
     var issuedAtClaim: IssuedAtClaim
     var expiration: ExpirationClaim
     var audience: AudienceClaim
 
-    func verify(using signer: JWTKit.JWTSigner) throws {
-        try self.audience.verifyIntendedAudience(includes: "appstoreconnect-v1")
+    // 追加の検証ロジックを実行する
+    func verify(using signer: JWTSigner) throws {
+        try expiration.verifyNotExpired()
     }
 }

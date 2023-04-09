@@ -2,26 +2,8 @@ import Vapor
 import JWT
 
 func routes(_ app: Application) throws {
-//    let session = Session()
-//
-//    // TODO: App Store Connect API をリクエストする
-//    let request = GetAppSubmissionsRequest(appId: "1673161138")  // TopicGen
-//    let generator = JWTGenrator(app: app)
-//    let token = generator.generateJWT()
-//    print(token)
-//
-//    session.send(request) { result in
-//        switch result {
-//        case let .success(response):
-//            // TODO: レスポンスを次のリクエストに使用する
-//            print(response)
-//        case let .failure(error):
-//            print(error)
-//        }
-//    }
-
     app.get { req async in
-        // TODO: JWTを生成
+        // JWTを生成
         let privateKey = privateKey
 
         let payload = Payload(
@@ -40,12 +22,11 @@ func routes(_ app: Application) throws {
             print(token)
         } catch {
             print("エラー発生")
-//            return
         }
 
         let session = Session()
 
-        // TODO: App Store Connect API をリクエストする
+        // App Store Connect API をリクエストする
         let request = GetAppSubmissionsRequest(appId: "1673161138", token: token)  // TopicGen
 
         session.send(request) { result in
@@ -57,7 +38,6 @@ func routes(_ app: Application) throws {
                 print(error)
             }
         }
-
 
         return "sample"
     }

@@ -31,19 +31,22 @@ func routes(_ app: Application) throws {
             audience: .init(value: ["appstoreconnect-v1"])
         )
 
+        var token = ""
         do {
             let key = try ECDSAKey.private(pem: privateKey)
             app.jwt.signers.use(.es256(key: key))
-            let token = try req.jwt.sign(payload, kid: keyID)
+            let newToken = try req.jwt.sign(payload, kid: keyID)
+            token = newToken
             print(token)
         } catch {
             print("エラー発生")
+//            return
         }
 
         let session = Session()
 
         // TODO: App Store Connect API をリクエストする
-        let request = GetAppSubmissionsRequest(appId: "1673161138")  // TopicGen
+        let request = GetAppSubmissionsRequest(appId: "1673161138", token: token)  // TopicGen
 
         session.send(request) { result in
             switch result {

@@ -13,9 +13,10 @@ struct GetAppSubmissionsRequest: AppStoreConnectRequest {
 
     let method: HttpMethod = .get
     let path = "/reviewSubmissions"
+    let token: String
 
     var headerFields: [String : String] {
-        return ["Authorization": "eyJraWQiOiJKTlpDNDM0NVFOIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiI5NmQ4ZGIyYS02NDk2LTQyYjAtOTNjZi0zZjY4NGQxYzQyZmYiLCJleHAiOjE2ODAyNjk1MDksImF1ZCI6ImFwcHN0b3JlY29ubmVjdC12MSJ9.oCWAMHOzdrAQw4s8eF055404LtUGr2TOGkJg4mYpbTTo-DVCvh7QxIfyb1XXkwBQKRs7zm9L9Xo-45kEE93QuQ"]
+        return ["Authorization": token]
     }
 
     var queryParameters: [String : String]? {
@@ -33,7 +34,8 @@ struct GetAppSubmissionsRequest: AppStoreConnectRequest {
 
     let appId: String?
 
-    init(appId: String?) {
+    init(appId: String?, token: String) {
         self.appId = appId
+        self.token = token
     }
 }

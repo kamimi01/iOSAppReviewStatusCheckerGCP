@@ -32,6 +32,8 @@ struct GetAppSubmissionsRequest: AppStoreConnectRequest {
         return params
     }
 
+    var body: Data? = nil
+
     let appId: String?
 
     init(appId: String?, token: String) {

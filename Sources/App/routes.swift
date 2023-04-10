@@ -34,6 +34,20 @@ func routes(_ app: Application) throws {
             case let .success(response):
                 // TODO: レスポンスを次のリクエストに使用する
                 print(response)
+
+                let sessionForSlackRequest = Session()
+                let slackRequest = PostMessageRequest(postMessage: PostMessage(
+                    channel: channelID,
+                    text: "テスト投稿！！")
+                )
+                sessionForSlackRequest.send(slackRequest) { resultForSlack in
+                    switch resultForSlack {
+                    case let .success(slackResponse):
+                        print(slackResponse)
+                    case let .failure(errorForSlack):
+                        print(errorForSlack)
+                    }
+                }
             case let .failure(error):
                 print(error)
             }

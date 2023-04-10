@@ -42,6 +42,9 @@ final class Session {
 
         urlRequest.httpMethod = request.method.rawValue
         urlRequest.allHTTPHeaderFields = request.headerFields
+        if let body = request.body {
+            urlRequest.httpBody = body
+        }
 
         let task = session.dataTask(with: urlRequest) { data, response, error in
             if let error = error {

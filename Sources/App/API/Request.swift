@@ -14,4 +14,5 @@ protocol Request {
     var path: String { get }
     var headerFields: [String: String] { get }
     var queryParameters: [String: String]? { get }
+    var body: Data? { get }
 }

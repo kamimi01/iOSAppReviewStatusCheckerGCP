@@ -27,7 +27,8 @@ func routes(_ app: Application) throws {
         let session = Session()
 
         // App Store Connect API をリクエストする
-        let request = GetAppSubmissionsRequest(appId: "1673161138", token: token)  // TopicGen
+        let appID = "1673161138"
+        let request = GetAppSubmissionsRequest(appId: appID, token: token)  // TopicGen
 
         session.send(request) { result in
             switch result {
@@ -35,10 +36,16 @@ func routes(_ app: Application) throws {
                 // TODO: レスポンスを次のリクエストに使用する
                 print(response)
 
+                guard let postMessage = generatePostMessage(
+                    appID: appID,
+                    submittedDate: response.data.first?.attributes.submittedDate,
+                    state: response.data.first?.attributes.state
+                ) else { return Void()}
+
                 let sessionForSlackRequest = Session()
                 let slackRequest = PostMessageRequest(postMessage: PostMessage(
                     channel: channelID,
-                    text: "テスト投稿！！")
+                    text: postMessage)
                 )
                 sessionForSlackRequest.send(slackRequest) { resultForSlack in
                     switch resultForSlack {
@@ -56,7 +63,26 @@ func routes(_ app: Application) throws {
         return "sample"
     }
 
-    app.get("hello") { req async -> String in
-        "Hello, world!"
+    /*
+     最終形態
+     ```
+     審査状況をお知らせします！🍎
+
+     アプリ名：[アプリ名] 📱
+     バージョン：v10.45 🚀
+     審査ステータス：審査中 🤞
+     ```
+     */
+    func generatePostMessage(appID: String, submittedDate: String?, state: String?) -> String? {
+        guard let submittedDate = submittedDate,
+              let state = state else {
+            return nil
+        }
+
+        // TODO: 日付のフォーマットがおかしいので直す
+        let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:sssX")
+        print(convertedSubmittedDate)
+
+        return "こちら"
     }
 }

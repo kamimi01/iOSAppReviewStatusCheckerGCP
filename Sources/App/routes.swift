@@ -70,6 +70,7 @@ func routes(_ app: Application) throws {
 
      アプリ名：[アプリ名] 📱
      バージョン：v10.45 🚀
+     提出日時：2023/02/21 21:05:34 🗓️
      審査ステータス：審査中 🤞
      ```
      */
@@ -80,9 +81,18 @@ func routes(_ app: Application) throws {
         }
 
         // TODO: 日付のフォーマットがおかしいので直す
-        let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:sssX")
-        print(convertedSubmittedDate)
+        guard let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"),
+              let reviewState = ReviewState(rawValue: state)
+        else { return nil }
 
-        return "こちら"
+        let stringSubmittedDate = convertedSubmittedDate.stringFromDate(format: "yyyy/MM/dd HH:mm:ss")
+
+        let message = """
+        【TopicGen】
+        提出日時：\(stringSubmittedDate)
+        審査ステータス：\(reviewState.display) \(reviewState.emoji)
+        """
+
+        return message
     }
 }

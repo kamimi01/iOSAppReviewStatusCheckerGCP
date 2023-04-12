@@ -33,7 +33,7 @@ func routes(_ app: Application) throws {
         session.send(request) { result in
             switch result {
             case let .success(response):
-                // TODO: レスポンスを次のリクエストに使用する
+                // レスポンスを次のリクエストに使用する
                 print(response)
 
                 guard let postMessage = generatePostMessage(
@@ -63,24 +63,13 @@ func routes(_ app: Application) throws {
         return "sample"
     }
 
-    /*
-     最終形態
-     ```
-     審査状況をお知らせします！🍎
-
-     アプリ名：[アプリ名] 📱
-     バージョン：v10.45 🚀
-     提出日時：2023/02/21 21:05:34 🗓️
-     審査ステータス：審査中 🤞
-     ```
-     */
     func generatePostMessage(appID: String, submittedDate: String?, state: String?) -> String? {
         guard let submittedDate = submittedDate,
               let state = state else {
             return nil
         }
 
-        // TODO: 日付のフォーマットがおかしいので直す
+        // 日付のフォーマットがおかしいので直す
         guard let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"),
               let reviewState = ReviewState(rawValue: state)
         else { return nil }
@@ -88,6 +77,8 @@ func routes(_ app: Application) throws {
         let stringSubmittedDate = convertedSubmittedDate.stringFromDate(format: "yyyy/MM/dd HH:mm:ss")
 
         let message = """
+        iOS アプリの審査状況をお知らせします！🍎
+
         【TopicGen】
         提出日時：\(stringSubmittedDate)
         審査ステータス：\(reviewState.display) \(reviewState.emoji)

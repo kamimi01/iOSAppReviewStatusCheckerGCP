@@ -3,26 +3,8 @@ import JWT
 
 func routes(_ app: Application) throws {
     app.get { req async in
-        // JWTを生成
-        let privateKey = privateKey
 
-        let payload = Payload(
-            issuer: .init(value: issuerID),
-            issuedAtClaim: .init(value: Date()),
-            expiration: .init(value: Calendar.current.date(byAdding: .minute, value: 20, to: Date()) ?? Date()),
-            audience: .init(value: ["appstoreconnect-v1"])
-        )
-
-        var token = ""
-        do {
-            let key = try ECDSAKey.private(pem: privateKey)
-            app.jwt.signers.use(.es256(key: key))
-            let newToken = try req.jwt.sign(payload, kid: keyID)
-            token = newToken
-            print(token)
-        } catch {
-            print("エラー発生")
-        }
+        guard let token = generateJWT(req: req) else { return "" }
 
         let session = Session()
 
@@ -63,6 +45,29 @@ func routes(_ app: Application) throws {
         return "sample"
     }
 
+    /// JWT を生成
+    func generateJWT(req: Vapor.Request) -> String? {
+        let privateKey = privateKey
+
+        let payload = Payload(
+            issuer: .init(value: issuerID),
+            issuedAtClaim: .init(value: Date()),
+            expiration: .init(value: Calendar.current.date(byAdding: .minute, value: 20, to: Date()) ?? Date()),
+            audience: .init(value: ["appstoreconnect-v1"])
+        )
+
+        do {
+            let key = try ECDSAKey.private(pem: privateKey)
+            app.jwt.signers.use(.es256(key: key))
+            let newToken = try req.jwt.sign(payload, kid: keyID)
+            return newToken
+        } catch {
+            print("failed to generate jwt")
+            return nil
+        }
+    }
+
+    /// Slack に投稿するメッセージを生成
     func generatePostMessage(appID: String, submittedDate: String?, state: String?) -> String? {
         guard let submittedDate = submittedDate,
               let state = state else {

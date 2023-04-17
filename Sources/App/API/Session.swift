@@ -8,11 +8,11 @@
 import Foundation
 
 enum SessionError: Error {
-    case noData(HTTPURLResponse)
     case noResponse
     case unacceptableStatusCode(Int, Message?)
     case failedToCreateComponents(URL)
     case failedToCreateURL(URLComponents)
+    case failedToDecode(Error)
 }
 
 final class Session {
@@ -22,22 +22,16 @@ final class Session {
         self.session = session
     }
 
-    @discardableResult
-    func send<T: Request>(
-        _ request: T,
-        completion: @escaping (Result<T.Response, Error>) -> ()
-    ) -> URLSessionTask? {
+    func send<T: Request>(_ request: T) async throws -> T.Response {
         let url = request.baseURL.appendingPathComponent(request.path)
 
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
-            completion(.failure(SessionError.failedToCreateComponents(url)))
-            return nil
+            throw SessionError.failedToCreateComponents(url)
         }
         components.queryItems = request.queryParameters?.compactMap(URLQueryItem.init)
 
         guard var urlRequest = components.url.map({ URLRequest(url: $0) }) else {
-            completion(.failure(SessionError.failedToCreateURL(components)))
-            return nil
+            throw SessionError.failedToCreateURL(components)
         }
 
         urlRequest.httpMethod = request.method.rawValue
@@ -46,39 +40,23 @@ final class Session {
             urlRequest.httpBody = body
         }
 
-        let task = session.dataTask(with: urlRequest) { data, response, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
+        let (data, response) = try await URLSession.shared.data(for: urlRequest)
 
-            guard let response = response as? HTTPURLResponse else {
-                completion(.failure(SessionError.noResponse))
-                return
-            }
-
-            guard let data = data else {
-                completion(.failure(SessionError.noData(response)))
-                return
-            }
-
-            guard 200..<300 ~= response.statusCode else {
-                let message = try? JSONDecoder().decode(SessionError.Message.self, from: data)
-                completion(.failure(SessionError.unacceptableStatusCode(response.statusCode, message)))
-                return
-            }
-
-            do {
-                let object = try JSONDecoder().decode(T.Response.self, from: data)
-                completion(.success(object))
-            } catch {
-                completion(.failure(error))
-            }
+        guard let response = response as? HTTPURLResponse else {
+            throw SessionError.noResponse
         }
 
-        task.resume()
+        guard 200..<300 ~= response.statusCode else {
+            let message = try? JSONDecoder().decode(SessionError.Message.self, from: data)
+            throw SessionError.unacceptableStatusCode(response.statusCode, message)
+        }
 
-        return task
+        do {
+            let object = try JSONDecoder().decode(T.Response.self, from: data)
+            return object
+        } catch {
+            throw SessionError.failedToDecode(error)
+        }
     }
 }
 

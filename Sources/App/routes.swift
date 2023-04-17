@@ -12,34 +12,26 @@ func routes(_ app: Application) throws {
         let appID = "1673161138"
         let request = GetAppSubmissionsRequest(appId: appID, token: token)  // TopicGen
 
-        session.send(request) { result in
-            switch result {
-            case let .success(response):
-                // レスポンスを次のリクエストに使用する
-                print(response)
+        do {
+            let result = try await session.send(request)
 
-                guard let postMessage = generatePostMessage(
-                    appID: appID,
-                    submittedDate: response.data.first?.attributes.submittedDate,
-                    state: response.data.first?.attributes.state
-                ) else { return Void()}
+            guard let postMessage = generatePostMessage(
+                appID: appID,
+                submittedDate: result.data.first?.attributes.submittedDate,
+                state: result.data.first?.attributes.state
+            ) else { return "cannot generate post message" }
 
-                let sessionForSlackRequest = Session()
-                let slackRequest = PostMessageRequest(postMessage: PostMessage(
-                    channel: channelID,
-                    text: postMessage)
-                )
-                sessionForSlackRequest.send(slackRequest) { resultForSlack in
-                    switch resultForSlack {
-                    case let .success(slackResponse):
-                        print(slackResponse)
-                    case let .failure(errorForSlack):
-                        print(errorForSlack)
-                    }
-                }
-            case let .failure(error):
-                print(error)
-            }
+            let sessionForSlackRequest = Session()
+            let slackRequest = PostMessageRequest(postMessage: PostMessage(
+                channel: channelID,
+                text: postMessage)
+            )
+
+            let postResult = try await sessionForSlackRequest.send(slackRequest)
+            print(postResult.ok, postResult.error)
+
+        } catch {
+            return "failed"
         }
 
         return "sample"

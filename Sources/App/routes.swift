@@ -2,6 +2,7 @@ import Vapor
 import JWT
 
 // TODO: 複数アプリのステータスを投稿できるように
+// TODO: アプリ名とバージョンを取得できるように
 // TODO: 期限が切れていないJWTがあったらそれを使用するように
 // TODO: APIではなく、バッチとして実装するように
 func routes(_ app: Application) throws {

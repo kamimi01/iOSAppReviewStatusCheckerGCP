@@ -3,84 +3,28 @@ import JWT
 
 func routes(_ app: Application) throws {
     app.get { req async in
-
-        guard let token = generateJWT(req: req) else { return "" }
-
-        let session = Session()
-
-        // App Store Connect API をリクエストする
         let appID = "1673161138"
-        let request = GetAppSubmissionsRequest(appId: appID, token: token)  // TopicGen
 
         do {
-            let result = try await session.send(request)
+            // App Store Connectから審査情報を取得する
+            let ascController = AppStoreConnectController(app: app, req: req, appIDs: [appID])
+            let reviewSubmissions = try await ascController.requestReviewSubmission()
 
-            guard let postMessage = generatePostMessage(
+            // 投稿するメッセージを生成する
+            let messageGenerator = MessageGenerator()
+            let postMessage = try messageGenerator.generatePostMessage(
                 appID: appID,
-                submittedDate: result.data.first?.attributes.submittedDate,
-                state: result.data.first?.attributes.state
-            ) else { return "cannot generate post message" }
-
-            let sessionForSlackRequest = Session()
-            let slackRequest = PostMessageRequest(postMessage: PostMessage(
-                channel: channelID,
-                text: postMessage)
+                submittedDate: reviewSubmissions.data.first?.attributes.submittedDate,
+                state: reviewSubmissions.data.first?.attributes.state
             )
 
-            let postResult = try await sessionForSlackRequest.send(slackRequest)
-            print(postResult.ok, postResult.error)
-
+            // Slackに投稿する
+            let slackController = SlackController()
+            try await slackController.post(message: postMessage)
         } catch {
-            return "failed"
+            return "unexpectedError: \(error)"
         }
 
-        return "sample"
-    }
-
-    /// JWT を生成
-    func generateJWT(req: Vapor.Request) -> String? {
-        let privateKey = privateKey
-
-        let payload = Payload(
-            issuer: .init(value: issuerID),
-            issuedAtClaim: .init(value: Date()),
-            expiration: .init(value: Calendar.current.date(byAdding: .minute, value: 20, to: Date()) ?? Date()),
-            audience: .init(value: ["appstoreconnect-v1"])
-        )
-
-        do {
-            let key = try ECDSAKey.private(pem: privateKey)
-            app.jwt.signers.use(.es256(key: key))
-            let newToken = try req.jwt.sign(payload, kid: keyID)
-            return newToken
-        } catch {
-            print("failed to generate jwt")
-            return nil
-        }
-    }
-
-    /// Slack に投稿するメッセージを生成
-    func generatePostMessage(appID: String, submittedDate: String?, state: String?) -> String? {
-        guard let submittedDate = submittedDate,
-              let state = state else {
-            return nil
-        }
-
-        // 日付のフォーマットがおかしいので直す
-        guard let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"),
-              let reviewState = ReviewState(rawValue: state)
-        else { return nil }
-
-        let stringSubmittedDate = convertedSubmittedDate.stringFromDate(format: "yyyy/MM/dd HH:mm:ss")
-
-        let message = """
-        iOS アプリの審査状況をお知らせします！🍎
-
-        【TopicGen】
-        提出日時：\(stringSubmittedDate)
-        審査ステータス：\(reviewState.display) \(reviewState.emoji)
-        """
-
-        return message
+        return "success"
     }
 }

@@ -1,6 +1,9 @@
 import Vapor
 import JWT
 
+// TODO: 複数アプリのステータスを投稿できるように
+// TODO: 期限が切れていないJWTがあったらそれを使用するように
+// TODO: APIではなく、バッチとして実装するように
 func routes(_ app: Application) throws {
     app.get { req async in
         let appID = "1673161138"

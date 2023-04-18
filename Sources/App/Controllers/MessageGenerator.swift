@@ -19,7 +19,6 @@ class MessageGenerator {
             throw MessageGenerateError.requiredParametersAreNil((submittedDate, state))
         }
 
-        // 日付のフォーマットがおかしいので直す
         guard let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"),
               let reviewState = ReviewState(rawValue: state)
         else { throw MessageGenerateError.falidToConvertDate(submittedDate) }

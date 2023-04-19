@@ -22,14 +22,14 @@ struct AppAttributes: Decodable {
 }
 
 struct AppRelationships: Decodable {
-    let appStoreVersions: AppStoreVersions
+    let appStoreVersions: AppStoreVersionsInApps
 }
 
-struct AppStoreVersions: Decodable {
-    let links: AppStoreVersionsLinks
+struct AppStoreVersionsInApps: Decodable {
+    let links: AppStoreVersionsLinksInApps
 }
 
-struct AppStoreVersionsLinks: Decodable {
+struct AppStoreVersionsLinksInApps: Decodable {
     let related: URL?
 
     init(related: String) {

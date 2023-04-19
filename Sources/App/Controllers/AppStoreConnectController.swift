@@ -45,6 +45,16 @@ class AppStoreConnectController {
         return result
     }
 
+    func requestAppStoreVersions(appID: String) async throws -> AppStoreVersionsRequest.Response {
+        guard let jwt = generateJWT() else { throw AppStoreConnectRequestError.cannotGenerateJWT }
+
+        let session = Session()
+        let request = AppStoreVersionsRequest(appID: appID, token: jwt)
+        let result = try await session.send(request)
+
+        return result
+    }
+
     /// JWT を生成
     private func generateJWT() -> String? {
         let privateKey = privateKey

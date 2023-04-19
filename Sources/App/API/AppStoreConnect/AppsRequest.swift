@@ -19,8 +19,8 @@ struct AppsRequest: AppStoreConnectRequest {
     }
 
     var queryParameters: [String : String]? {
-        var params: [String: String] = [
-            "fields[apps]": "appStoreVersions,name"
+        let params: [String: String] = [
+            "fields[apps]": "name"
         ]
 
         return params

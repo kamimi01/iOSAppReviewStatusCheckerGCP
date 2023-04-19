@@ -16,14 +16,14 @@ struct ReviewSubmission: Decodable {
 }
 
 struct ReviewData: Decodable {
-    let attributes: Attributes
+    let attributes: ReviewSubmissionAttributes
 
-    init(attributes: Attributes) {
+    init(attributes: ReviewSubmissionAttributes) {
         self.attributes = attributes
     }
 }
 
-struct Attributes: Decodable {
+struct ReviewSubmissionAttributes: Decodable {
     let submittedDate: String
     let state: String
 }

@@ -19,6 +19,8 @@ class AppStoreConnectController {
     private let req: Vapor.Request
     private let appIDs: [String]
 
+    private var token: String? = nil
+
     init(app: Application, req: Vapor.Request, appIDs: [String]) {
         self.app = app
         self.req = req
@@ -47,6 +49,11 @@ class AppStoreConnectController {
 
     /// JWT を生成
     private func generateJWT() -> String? {
+        if let token = token {
+            print("Use created token again")
+            return token
+        }
+
         let privateKey = privateKey
 
         let payload = Payload(
@@ -59,7 +66,8 @@ class AppStoreConnectController {
         do {
             let key = try ECDSAKey.private(pem: privateKey)
             app.jwt.signers.use(.es256(key: key))
-            let token = try req.jwt.sign(payload, kid: keyID)
+            token = try req.jwt.sign(payload, kid: keyID)
+            print("Generate new token")
             return token
         } catch {
             print("failed to generate jwt")

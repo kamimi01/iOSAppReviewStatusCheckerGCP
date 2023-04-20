@@ -25,16 +25,6 @@ class AppStoreConnectController {
         self.appIDs = appIDs
     }
 
-    func requestReviewSubmission() async throws -> GetAppSubmissionsRequest.Response {
-        guard let jwt = generateJWT() else { throw AppStoreConnectRequestError.cannotGenerateJWT }
-
-        let session = Session()
-        let request = GetAppSubmissionsRequest(appId: appIDs.first, token: jwt)
-        let result = try await session.send(request)
-
-        return result
-    }
-
     func requestApps() async throws -> AppsRequest.Response {
         guard let jwt = generateJWT() else { throw AppStoreConnectRequestError.cannotGenerateJWT }
 

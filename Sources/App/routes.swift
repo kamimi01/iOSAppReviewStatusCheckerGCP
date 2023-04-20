@@ -5,11 +5,12 @@ import JWT
 // TODO: 期限が切れていないJWTがあったらそれを使用するように
 // TODO: APIではなく、バッチとして実装するように
 func routes(_ app: Application) throws {
-    app.post("postAppStoreState", ":appID") { req async throws in
-        guard let appID = req.parameters.get("appID") else {
-            throw Abort(.badRequest, reason: "no required path paramter appID")
-        }
-        print(appID)
+    app.post("postAppStoreState") { req async throws in
+        let postAppStoreState = try req.content.decode(PostAppStoreState.self)
+        guard let appID = postAppStoreState.appIDs.first,
+              appID.isEmpty == false,
+              postAppStoreState.channelID.isEmpty == false
+        else { throw Abort(.badRequest, reason: "no required path paramter appID or channelID") }
 
         do {
             // App Store Connectから審査情報を取得する
@@ -30,7 +31,7 @@ func routes(_ app: Application) throws {
 
             // Slackに投稿する
             let slackController = SlackController()
-            try await slackController.post(message: postMessage)
+            try await slackController.post(to: postAppStoreState.channelID, message: postMessage)
         } catch AppStoreConnectRequestError.cannotGenerateJWT {
             throw Abort(.unauthorized, reason: "Failed to generate JWT")
         } catch SlackRequestError.unexpectedError(let error) {

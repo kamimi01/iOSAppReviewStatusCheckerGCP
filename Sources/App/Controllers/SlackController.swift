@@ -13,7 +13,7 @@ enum SlackRequestError: Error {
 
 class SlackController {
     /// Slack にメッセージを投稿する
-    func post(message: String) async throws {
+    func post(to channelID: String, message: String) async throws {
         let session = Session()
         let request = PostMessageRequest(postMessage: PostMessage(channel: channelID, text: message))
 

@@ -18,4 +18,5 @@ struct AppStoreVersion: Decodable {
 struct AppStoreVersionAttributes: Decodable {
     let versionString: String
     let appStoreState: String
+    let createdDate: String
 }

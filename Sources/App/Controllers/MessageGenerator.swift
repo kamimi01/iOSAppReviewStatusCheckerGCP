@@ -13,24 +13,27 @@ enum MessageGenerateError: Error {
 }
 
 class MessageGenerator {
-    func generatePostMessage(appID: String, submittedDate: String?, state: String?) throws -> String {
-        guard let submittedDate = submittedDate,
+    func generatePostMessage(appName: String?, appVersion: String?,  createdDate: String?, state: String?) throws -> String {
+        guard let appName = appName,
+              let appVersion = appVersion,
+              let submittedDate = createdDate,
               let state = state else {
-            throw MessageGenerateError.requiredParametersAreNil((submittedDate, state))
+            throw MessageGenerateError.requiredParametersAreNil((createdDate, state))
         }
 
-        guard let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:ss.SSSZ"),
-              let reviewState = ReviewState(rawValue: state)
-        else { throw MessageGenerateError.falidToConvertDate(submittedDate) }
+        guard let convertedSubmittedDate = submittedDate.dateFromString(format: "yyyy-MM-dd'T'HH:mm:ssZZZZZ") else { throw MessageGenerateError.falidToConvertDate(submittedDate) }
+
+        let appStoreState = AppStoreState(rawValue: state)
 
         let stringSubmittedDate = convertedSubmittedDate.stringFromDate(format: "yyyy/MM/dd HH:mm:ss")
 
         let message = """
-        iOS アプリの審査状況をお知らせします🍎
+        iOS アプリのステータスをお知らせします🍎
 
-        【TopicGen】
-        提出日時：\(stringSubmittedDate)
-        審査ステータス：\(reviewState.display) \(reviewState.emoji)
+        【\(appName)】
+        バージョン：\(appVersion)
+        ステータス：\(appStoreState?.display ?? "不明なステータス")（\(appStoreState?.rawValue ?? "")） \(appStoreState?.emoji ?? "❓")
+        作成日時：\(stringSubmittedDate)
         """
 
         return message

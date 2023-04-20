@@ -5,8 +5,11 @@ import JWT
 // TODO: 期限が切れていないJWTがあったらそれを使用するように
 // TODO: APIではなく、バッチとして実装するように
 func routes(_ app: Application) throws {
-    app.get("postReviewSubmissionState") { req async in
-        let appID = "1673161138"
+    app.post("postAppStoreState", ":appID") { req async in
+        guard let appID = req.parameters.get("appID") else {
+            return "no required query parameter"
+        }
+        print(appID)
 
         do {
             // App Store Connectから審査情報を取得する

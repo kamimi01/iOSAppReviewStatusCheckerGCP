@@ -28,12 +28,11 @@ class MessageGenerator {
         let stringSubmittedDate = convertedSubmittedDate.stringFromDate(format: "yyyy/MM/dd HH:mm:ss")
 
         let message = """
-        iOS アプリのステータスをお知らせします🍎
-
         【\(appName)】
         バージョン：\(appVersion)
         ステータス：\(appStoreState?.display ?? "不明なステータス")（\(appStoreState?.rawValue ?? "")） \(appStoreState?.emoji ?? "❓")
         作成日時：\(stringSubmittedDate)
+        \n
         """
 
         return message

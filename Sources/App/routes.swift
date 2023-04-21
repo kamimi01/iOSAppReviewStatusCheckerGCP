@@ -14,7 +14,7 @@ func routes(_ app: Application) throws {
 
         do {
             // App Store Connectから審査情報を取得する
-            let ascController = AppStoreConnectController(app: app, req: req, appIDs: [appID])
+            let ascController = AppStoreConnectController(app: app, req: req)
             // アプリ名を取得する
             let apps = try await ascController.requestApps()
             // バージョンと作成日時、ステータスを取得する

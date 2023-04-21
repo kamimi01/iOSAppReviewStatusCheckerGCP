@@ -17,14 +17,12 @@ enum AppStoreConnectRequestError: Error {
 class AppStoreConnectController {
     private let app: Application
     private let req: Vapor.Request
-    private let appIDs: [String]
 
     private var token: String? = nil
 
-    init(app: Application, req: Vapor.Request, appIDs: [String]) {
+    init(app: Application, req: Vapor.Request) {
         self.app = app
         self.req = req
-        self.appIDs = appIDs
     }
 
     func requestApps() async throws -> AppsRequest.Response {

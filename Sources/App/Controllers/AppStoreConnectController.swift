@@ -11,6 +11,7 @@ import JWT
 
 enum AppStoreConnectRequestError: Error {
     case cannotGenerateJWT
+    case notFoundAppName
 }
 
 /// App Store Connect へのリクエストを受け、レスポンスを返す責務
@@ -25,14 +26,25 @@ class AppStoreConnectController {
         self.req = req
     }
 
-    func requestApps() async throws -> AppsRequest.Response {
+    func requestApp(appID: String) async throws -> String? {
         guard let jwt = generateJWT() else { throw AppStoreConnectRequestError.cannotGenerateJWT }
 
         let session = Session()
         let request = AppsRequest(token: jwt)
         let result = try await session.send(request)
 
-        return result
+        var name: String? {
+            for app in result.data where app.id == appID {
+                return app.attributes.name
+            }
+            return nil
+        }
+
+        guard let name = name else {
+            throw AppStoreConnectRequestError.notFoundAppName
+        }
+
+        return name
     }
 
     func requestAppStoreVersions(appID: String) async throws -> AppStoreVersionsRequest.Response {

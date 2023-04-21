@@ -19,7 +19,7 @@ struct AppStoreVersionsRequest: AppStoreConnectRequest {
     }
 
     var queryParameters: [String : String]? {
-        var params: [String: String] = [
+        let params: [String: String] = [
             "fields[appStoreVersions]": "appStoreState,versionString,createdDate",
             "limit": "1"
         ]

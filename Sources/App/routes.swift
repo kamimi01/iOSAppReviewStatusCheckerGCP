@@ -1,5 +1,4 @@
 import Vapor
-import JWT
 
 // TODO: 期限が切れていないJWTがあったらそれを使用するように
 func routes(_ app: Application) throws {

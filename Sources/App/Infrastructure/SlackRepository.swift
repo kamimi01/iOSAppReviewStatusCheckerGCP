@@ -13,7 +13,7 @@ enum SlackRepositoryError: Error {
 
 class SlackRepository {
     /// Slack にメッセージを投稿する
-    func post(to channelID: String, message: String) async throws {
+    func post(to channelID: String, message: String) async throws -> PostMessageRequest.Response {
         let session = Session()
         let request = PostMessageRequest(postMessage: PostMessage(channel: channelID, text: message))
 
@@ -22,5 +22,7 @@ class SlackRepository {
         if result.ok == false {
             throw SlackRepositoryError.unexpectedError(result.error)
         }
+
+        return result
     }
 }

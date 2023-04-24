@@ -9,6 +9,8 @@ import Foundation
 
 struct PostMessageResponse: Decodable {
     let ok: Bool
+    let channelID: String?
+    let message: Message?
     let error: String?
 
     init(ok: Int, error: String?) {
@@ -16,4 +18,8 @@ struct PostMessageResponse: Decodable {
         self.ok = (ok == 1) ? true : false
         self.error = error
     }
+}
+
+struct Message: Decodable {
+    let text: String
 }

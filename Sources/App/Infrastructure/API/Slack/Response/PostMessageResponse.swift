@@ -10,10 +10,10 @@ import Foundation
 struct PostMessageResponse: Decodable {
     let ok: Bool
     let channelID: String?
-    let message: Message?
+    let message: MessageResponse?
     let error: String?
 
-    init(ok: Int, channelID: String?, message: Message?, error: String?) {
+    init(ok: Int, channelID: String?, message: MessageResponse?, error: String?) {
         print(ok)
         self.ok = (ok == 1) ? true : false
         self.channelID = channelID
@@ -22,6 +22,6 @@ struct PostMessageResponse: Decodable {
     }
 }
 
-struct Message: Decodable {
+struct MessageResponse: Decodable {
     let text: String
 }

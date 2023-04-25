@@ -27,23 +27,24 @@ class PostAppStateToSlackUseCase {
         self.req = req
     }
 
-    // TODO: トークンは引数から無くして内部処理に隠蔽したい
-    func postAppStateToSlack(appID: String, channelID: String) async throws -> PostAppStateToSlackDTO {
+    func postAppStateToSlack(appIDs: [String], channelID: String) async throws -> PostAppStateToSlackDTO {
         guard let jwt = generateJWT() else {
             throw AppStoreConnectRequestError.cannotGenerateJWT
         }
 
         // TODO: AppRepositoryへのfetchとAppStoreStateRepositoryのfetchは同時実行してOKなので、await を外して並行処理を実施できるように修正したい
-        let app = try await appRepository.fetch(id: appID, token: jwt)
+        for appID in appIDs {
+            let app = try await appRepository.fetch(id: appID, token: jwt)
 
-        let appStoreVersion = try await appStoreVersionRepository.fetch(id: appID, token: jwt)
+            let appStoreVersion = try await appStoreVersionRepository.fetch(id: appID, token: jwt)
+        }
 
         // TODO: メッセージの生成をする
         let postMessage = "テスト投稿"
         let slackPostResult = try await slackRepository.post(to: channelID, message: postMessage)
 
         return PostAppStateToSlackDTO(
-            appID: appID,
+            appIDs: appIDs,
             channelID: channelID,
             postMessage: postMessage
         )

@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum AppStoreConnectRequestError: Error {
+    case notFoundAppName
+    case cannotGenerateJWT
+}
+
 class AppRepository {
     // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
     func fetch(id: String, token: String) async throws -> AppInfo {

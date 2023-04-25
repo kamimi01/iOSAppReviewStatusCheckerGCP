@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Vapor
 
-struct PostAppStateToSlackDTO {
-    let appID: String
+struct PostAppStateToSlackDTO: Content {
+    let appIDs: [String]
     let channelID: String
     let postMessage: String
 }

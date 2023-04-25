@@ -2,6 +2,7 @@ import Vapor
 
 func routes(_ app: Application) throws {
     app.post("postAppStoreState") { req async throws in
+        // TODO: Controllerクラスに処理を委譲して、エラーレスポンスのハンドリングをする
         let postAppStoreState = try req.content.decode(PostAppStoreState.self)
         let appIDs = postAppStoreState.appIDs
         if appIDs.isEmpty || postAppStoreState.channelID.isEmpty {

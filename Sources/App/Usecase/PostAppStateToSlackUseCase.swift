@@ -14,15 +14,17 @@ class PostAppStateToSlackUseCase {
     private let appRepository: AppRepository
     private let appStoreVersionRepository: AppStoreVersionRepository
     private let slackRepository: SlackRepository
+    private let messageRepository: MessageRepository
 
     private var token: String?
     private let app: Application
     private let req: Vapor.Request
 
-    init(appRepository: AppRepository = AppRepository(), appStoreVersionRepository: AppStoreVersionRepository = AppStoreVersionRepository(), slackRepository: SlackRepository = SlackRepository(), app: Application, req: Vapor.Request) {
+    init(appRepository: AppRepository = AppRepository(), appStoreVersionRepository: AppStoreVersionRepository = AppStoreVersionRepository(), slackRepository: SlackRepository = SlackRepository(), messageRepository: MessageRepository = MessageRepository(), app: Application, req: Vapor.Request) {
         self.appRepository = appRepository
         self.appStoreVersionRepository = appStoreVersionRepository
         self.slackRepository = slackRepository
+        self.messageRepository = messageRepository
         self.app = app
         self.req = req
     }
@@ -33,20 +35,23 @@ class PostAppStateToSlackUseCase {
         }
 
         // TODO: AppRepositoryへのfetchとAppStoreStateRepositoryのfetchは同時実行してOKなので、await を外して並行処理を実施できるように修正したい
+        var messages = [Message]()
         for appID in appIDs {
             let app = try await appRepository.fetch(id: appID, token: jwt)
 
             let appStoreVersion = try await appStoreVersionRepository.fetch(id: appID, token: jwt)
+
+            let messageForApp = try messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
+            messages.append(messageForApp)
         }
 
-        // TODO: メッセージの生成をする
-        let postMessage = "テスト投稿"
+        let postMessage = messageRepository.generateMessage(messagesForApp: messages)
         let slackPostResult = try await slackRepository.post(to: channelID, message: postMessage)
 
         return PostAppStateToSlackDTO(
             appIDs: appIDs,
-            channelID: channelID,
-            postMessage: postMessage
+            channelID: slackPostResult.channelID ?? "",
+            postMessage: slackPostResult.message?.text ?? ""
         )
     }
 

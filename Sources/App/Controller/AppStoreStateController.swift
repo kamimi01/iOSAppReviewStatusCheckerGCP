@@ -17,6 +17,7 @@ class AppStoreStateController {
     }
 
     func postAppStoreState(req: Vapor.Request) async throws -> PostAppStateToSlackDTO {
+        _ = try req.auth.require(User.self).name
         let postAppStoreState = try req.content.decode(PostAppStoreState.self)
         let appIDs = postAppStoreState.appIDs
         if appIDs.isEmpty || postAppStoreState.channelID.isEmpty {

@@ -50,7 +50,7 @@ class PostAppStateToSlackUseCase {
 
         return PostAppStateToSlackDTO(
             appIDs: appIDs,
-            channelID: slackPostResult.channelID ?? "",
+            channelID: slackPostResult.channel ?? "",
             postMessage: slackPostResult.message?.text ?? ""
         )
     }

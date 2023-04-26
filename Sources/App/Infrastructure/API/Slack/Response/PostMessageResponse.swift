@@ -9,14 +9,14 @@ import Foundation
 
 struct PostMessageResponse: Decodable {
     let ok: Bool
-    let channelID: String?
+    let channel: String?
     let message: MessageResponse?
     let error: String?
 
-    init(ok: Int, channelID: String?, message: MessageResponse?, error: String?) {
+    init(ok: Int, channel: String?, message: MessageResponse?, error: String?) {
         print(ok)
         self.ok = (ok == 1) ? true : false
-        self.channelID = channelID
+        self.channel = channel
         self.message = message
         self.error = error
     }

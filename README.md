@@ -16,4 +16,6 @@ App Store Connect 上での iOS アプリのステータスをチェックし、
 
 ## ドメインモデル図
 
+- 吹き出し：ビジネスルール
+
 ![](./docs/domain_modeling.drawio.png)

@@ -27,7 +27,7 @@ struct AppStoreVersionsRequest: AppStoreConnectRequest {
         return params
     }
 
-    var body: Data? = nil
+    var body: [String: Any]? = nil
 
     init(appID: String, token: String) {
         self.path = "/apps/\(appID)/appStoreVersions"

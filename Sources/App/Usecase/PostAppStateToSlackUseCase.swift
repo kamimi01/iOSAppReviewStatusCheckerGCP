@@ -37,16 +37,16 @@ class PostAppStateToSlackUseCase {
         // TODO: AppRepositoryへのfetchとAppStoreStateRepositoryのfetchは同時実行してOKなので、await を外して並行処理を実施できるように修正したい
         var messages = [Message]()
         for appID in appIDs {
-            let app = try await appRepository.fetch(id: appID, token: jwt)
+            let app = try await appRepository.fetch(id: appID, token: jwt, req: req)
 
-            let appStoreVersion = try await appStoreVersionRepository.fetch(id: appID, token: jwt)
+            let appStoreVersion = try await appStoreVersionRepository.fetch(id: appID, token: jwt, req: req)
 
             let messageForApp = try messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
             messages.append(messageForApp)
         }
 
         let postMessage = messageRepository.generateMessage(messagesForApp: messages)
-        let slackPostResult = try await slackRepository.post(to: channelID, message: postMessage)
+        let slackPostResult = try await slackRepository.post(to: channelID, message: postMessage, req: req)
 
         return PostAppStateToSlackDTO(
             appIDs: appIDs,

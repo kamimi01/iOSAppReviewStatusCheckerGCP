@@ -30,10 +30,6 @@ class AppStoreStateController {
                 channelID: postAppStoreState.channelID
             )
             return result
-        } catch SessionError.noResponse {
-            throw Abort(.internalServerError, reason: "no response")
-        } catch SessionError.unacceptableStatusCode(let statusCode, let message) {
-            throw Abort(HTTPResponseStatus(statusCode: statusCode), reason: message?.message ?? "")
         } catch {
             throw Abort(.badRequest, reason: error.localizedDescription)
         }

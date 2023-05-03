@@ -5,14 +5,14 @@
 //  Created by mikaurakawa on 2023/04/23.
 //
 
-import Foundation
+import Vapor
 
 class AppStoreVersionRepository {
     // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
-    func fetch(id: String, token: String) async throws -> AppStoreVersionInfo {
-        let session = Session()
+    func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppStoreVersionInfo {
         let request = AppStoreVersionsRequest(appID: id, token: token)
-        let result = try await session.send(request)
+        let client = VaporAPIClient(req: req)
+        let result = try await client.request(request)
 
         return try AppStoreVersionInfo(
             id: id,

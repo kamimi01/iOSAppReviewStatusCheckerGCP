@@ -25,15 +25,13 @@ struct PostMessageRequest: SlackRequest {
 
     var queryParameters: [String : String]? = nil
 
-    var body: Data? {
+    var body: [String: Any]? {
         guard let postMessage = postMessage else { return nil }
 
-        let body: [String: Any] = [
+        return [
             "token": botToken,
             "channel": postMessage.channel,
             "text": postMessage.text
         ]
-
-        return try! JSONSerialization.data(withJSONObject: body)
     }
 }

@@ -26,5 +26,5 @@ struct AppsRequest: AppStoreConnectRequest {
         return params
     }
 
-    var body: Data? = nil
+    var body: [String: Any]? = nil
 }

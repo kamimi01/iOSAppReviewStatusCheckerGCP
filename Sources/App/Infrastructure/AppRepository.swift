@@ -5,7 +5,7 @@
 //  Created by mikaurakawa on 2023/04/23.
 //
 
-import Foundation
+import Vapor
 
 enum AppStoreConnectRequestError: Error {
     case notFoundAppName
@@ -14,10 +14,10 @@ enum AppStoreConnectRequestError: Error {
 
 class AppRepository {
     // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
-    func fetch(id: String, token: String) async throws -> AppInfo {
-        let session = Session()
+    func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppInfo {
         let request = AppsRequest(token: token)
-        let result = try await session.send(request)
+        let client = VaporAPIClient(req: req)
+        let result = try await client.request(request)
 
         var name: String? {
             for app in result.data where app.id == id {

@@ -5,7 +5,6 @@
 //  Created by mikaurakawa on 2023/04/27.
 //
 
-import Foundation
 import Vapor
 
 class AppStoreStateController {

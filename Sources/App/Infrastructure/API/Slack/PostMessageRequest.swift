@@ -5,8 +5,6 @@
 //  Created by mikaurakawa on 2023/04/10.
 //
 
-import Foundation
-
 // - seealso: https://api.slack.com/methods/chat.postMessage
 struct PostMessageRequest: SlackRequest {
     typealias Response = PostMessageResponse

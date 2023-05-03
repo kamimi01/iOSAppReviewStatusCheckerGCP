@@ -5,8 +5,6 @@
 //  Created by mikaurakawa on 2023/04/12.
 //
 
-import Foundation
-
 enum AppStoreState: String {
     case developerRemovedFromSale = "DEVELOPER_REMOVED_FROM_SALE"
     case developerRejected = "DEVELOPER_REJECTED"

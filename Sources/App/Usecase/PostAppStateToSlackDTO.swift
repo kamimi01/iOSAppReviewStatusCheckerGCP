@@ -5,7 +5,6 @@
 //  Created by mikaurakawa on 2023/04/24.
 //
 
-import Foundation
 import Vapor
 
 struct PostAppStateToSlackDTO: Content {

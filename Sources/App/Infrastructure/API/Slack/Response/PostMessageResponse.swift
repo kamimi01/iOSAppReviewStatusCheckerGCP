@@ -5,8 +5,6 @@
 //  Created by mikaurakawa on 2023/04/10.
 //
 
-import Foundation
-
 struct PostMessageResponse: Decodable {
     let ok: Bool
     let channel: String?

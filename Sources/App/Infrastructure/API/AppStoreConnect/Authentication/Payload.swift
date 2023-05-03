@@ -5,7 +5,6 @@
 //  Created by mikaurakawa on 2023/04/02.
 //
 
-import Foundation
 import JWT
 
 struct Payload: JWTPayload {

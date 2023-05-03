@@ -5,8 +5,6 @@
 //  Created by mikaurakawa on 2023/04/26.
 //
 
-import Foundation
-
 class MessageRepository {
     func generateMessageForApp(appInfo: AppInfo, appStoreVersionInfo: AppStoreVersionInfo) throws -> Message {
         return try Message(

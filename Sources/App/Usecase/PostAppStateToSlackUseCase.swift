@@ -58,6 +58,7 @@ class PostAppStateToSlackUseCase {
     private func generateJWT() -> String? {
         if let token = token {
             print("Use created token again")
+            req.logger.info("Use created token again")
             return token
         }
 
@@ -75,9 +76,11 @@ class PostAppStateToSlackUseCase {
             app.jwt.signers.use(.es256(key: key))
             token = try req.jwt.sign(payload, kid: keyID)
             print("Generate new token")
+            req.logger.info("Generate new token")
             return token
         } catch {
             print("failed to generate jwt")
+            req.logger.error("failed to generate jwt")
             return nil
         }
     }

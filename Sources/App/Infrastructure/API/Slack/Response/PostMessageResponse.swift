@@ -12,7 +12,6 @@ struct PostMessageResponse: Decodable {
     let error: String?
 
     init(ok: Int, channel: String?, message: MessageResponse?, error: String?) {
-        print(ok)
         self.ok = (ok == 1) ? true : false
         self.channel = channel
         self.message = message

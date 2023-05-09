@@ -10,13 +10,15 @@ let package = Package(
         // 💧 A server-side Swift web framework.
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor-community/google-cloud-kit.git", exact: "1.0.0-rc.9")
     ],
     targets: [
         .target(
             name: "App",
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "JWT", package: "jwt")
+                .product(name: "JWT", package: "jwt"),
+                .product(name: "GoogleCloudKit", package: "google-cloud-kit")
             ],
             swiftSettings: [
                 // Enable better optimizations when building in Release configuration. Despite the use of

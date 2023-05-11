@@ -17,8 +17,9 @@ final class VaporAPIClient {
 
     func request<T: Request>(_ request: T) async throws -> T.Response {
         var headers = HTTPHeaders()
-        if request.headerFields.isEmpty == false {
-            for header in request.headerFields {
+        if let headerFields = request.headerFields,
+           headerFields.isEmpty == false {
+            for header in headerFields {
                 headers.add(name: header.key, value: header.value)
             }
         }

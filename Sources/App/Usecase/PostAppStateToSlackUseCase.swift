@@ -7,7 +7,6 @@
 
 import Vapor
 import JWT
-import GoogleCloudKit
 
 class PostAppStateToSlackUseCase {
     // TODO: リポジトリをDI して使う
@@ -62,7 +61,12 @@ class PostAppStateToSlackUseCase {
             return token
         }
 
-        let privateKey = privateKey
+        guard let issuerID = Environment.get("ISSUER_ID"),
+              let privateKey = Environment.get("PRIVATE_KEY"),
+              let keyIDString = Environment.get("KEY_ID")
+        else { return nil }
+
+        let keyID = JWKIdentifier(string: keyIDString)
 
         let payload = Payload(
             issuer: .init(value: issuerID),

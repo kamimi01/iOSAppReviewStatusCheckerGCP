@@ -12,7 +12,7 @@ protocol Request {
     var baseURL: URL { get }
     var method: HttpMethod { get }
     var path: String { get }
-    var headerFields: [String: String] { get }
+    var headerFields: [String: String]? { get }
     var queryParameters: [String: String]? { get }
     var body: [String: Any]? { get }
 }

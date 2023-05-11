@@ -12,7 +12,7 @@ struct AppStoreVersionsRequest: AppStoreConnectRequest {
     let path: String
     let token: String
 
-    var headerFields: [String : String] {
+    var headerFields: [String : String]? {
         return ["Authorization": token]
     }
 

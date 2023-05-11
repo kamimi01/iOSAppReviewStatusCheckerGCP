@@ -5,6 +5,8 @@
 //  Created by mikaurakawa on 2023/04/10.
 //
 
+import Vapor
+
 // - seealso: https://api.slack.com/methods/chat.postMessage
 struct PostMessageRequest: SlackRequest {
     typealias Response = PostMessageResponse
@@ -14,7 +16,9 @@ struct PostMessageRequest: SlackRequest {
     var method: HttpMethod = .post
     var path = "/chat.postMessage"
 
-    var headerFields: [String : String] {
+    var headerFields: [String : String]? {
+        guard let botToken = Environment.get("SLACK_BOT_TOKEN") else { return nil }
+
         return [
             "Content-Type": "application/json",
             "Authorization": "Bearer \(botToken)"
@@ -24,7 +28,9 @@ struct PostMessageRequest: SlackRequest {
     var queryParameters: [String : String]? = nil
 
     var body: [String: Any]? {
-        guard let postMessage = postMessage else { return nil }
+        guard let postMessage = postMessage,
+              let botToken = Environment.get("SLACK_BOT_TOKEN")
+        else { return nil }
 
         return [
             "token": botToken,

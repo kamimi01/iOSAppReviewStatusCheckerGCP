@@ -12,7 +12,7 @@ struct AppsRequest: AppStoreConnectRequest {
     let path = "/apps"
     let token: String
 
-    var headerFields: [String : String] {
+    var headerFields: [String : String]? {
         return ["Authorization": token]
     }
 

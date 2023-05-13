@@ -9,7 +9,7 @@ import Vapor
 
 class UserAuthenticator: AsyncBasicAuthenticator {
     func authenticate(basic: Vapor.BasicAuthorization, for request: Vapor.Request) async throws {
-        if basic.username == "test" && basic.password == "secret" {
+        if basic.username == Environment.get("USERNAME") && basic.password == Environment.get("PASSWORD") {
             request.auth.login(User(name: "Vapor"))
         }
     }

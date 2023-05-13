@@ -4,6 +4,9 @@ info:
   title: "iOS Review Submission Status Checker"
   version: "1.0.0"
 
+security:
+  - BasicAuth: []
+
 paths:
   "/postAppStoreState":
     post:
@@ -31,6 +34,10 @@ paths:
                 $ref: "#/components/schemas/401ResponseBody"
 
 components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
   schemas:
     PostAppStoreStateRequestBody:
       required:

@@ -1,0 +1,72 @@
+openapi: "3.0.0"
+
+info:
+  title: "iOS Review Submission Status Checker"
+  version: "1.0.0"
+
+paths:
+  "/postAppStoreState":
+    post:
+      summary: "App Store の状況取得を Slack に投稿"
+      tags: ["AppStoreState"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostAppStoreStateRequestBody"
+      responses:
+        "200":
+          description: "Success"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostAppStoreStateResponseBody"
+                              
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/401ResponseBody"
+
+components:
+  schemas:
+    PostAppStoreStateRequestBody:
+      required:
+        - chennelID
+        - appIDs
+      type: object
+      properties:
+        chennelID:
+          type: string
+          description: "投稿する Slack の チャンネル ID"
+          example: "C01JJKQPKCK"
+        appIDs:
+          type: array
+          description: "取得するアプリの ID"
+          example: ["1673161138", "1573161139"]
+    PostAppStoreStateResponseBody:
+      type: object
+      properties:
+        channelID:
+          type: string
+          description: "投稿した Slack の チャンネル ID"
+          example: "C01JJKQPKCK"
+        appIDs:
+          type: array
+          description: "取得したアプリの ID"
+          example: ["1673161138", "1573161139"]
+        postMessage:
+          type: string
+          description: "投稿したメッセージ"
+          example: "iOS アプリのステータスをお知らせします :apple:\n【TopicGen】\nバージョン：1.1\nステータス：販売準備完了（READY_FOR_SALE） :ok_hand::moneybag:\n作成日時：2023/02/21 20:51:45\n\n"
+    401ResponseBody:
+      type: object
+      properties:
+        error:
+          type: boolean
+          example: true
+        reason:
+          type: string
+          example: "Unauthorized"

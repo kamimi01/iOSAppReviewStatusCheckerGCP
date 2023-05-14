@@ -13,7 +13,7 @@ enum AppStoreVersionError: Error {
     case requiredParametersAreNil((version: String?, createdDateString: String?, appStoreStateString: String?))
 }
 
-struct AppStoreVersionInfo {
+struct AppStoreVersionAndState {
     let id: String
     let version: String
     let createdDate: Date

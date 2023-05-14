@@ -5,7 +5,7 @@
 //  Created by mikaurakawa on 2023/04/23.
 //
 
-struct AppInfo {
+struct AppName {
     let id: String
     let name: String
 

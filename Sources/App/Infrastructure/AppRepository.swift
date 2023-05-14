@@ -14,7 +14,7 @@ enum AppStoreConnectRequestError: Error {
 
 class AppRepository {
     // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
-    func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppInfo {
+    func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppName {
         let request = AppsRequest(token: token)
         let client = VaporAPIClient(req: req)
         let result = try await client.request(request)
@@ -30,6 +30,6 @@ class AppRepository {
             throw AppStoreConnectRequestError.notFoundAppName
         }
 
-        return AppInfo(id: id, name: name)
+        return AppName(id: id, name: name)
     }
 }

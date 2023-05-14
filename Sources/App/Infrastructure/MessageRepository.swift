@@ -6,7 +6,7 @@
 //
 
 class MessageRepository {
-    func generateMessageForApp(appInfo: AppInfo, appStoreVersionInfo: AppStoreVersionInfo) throws -> Message {
+    func generateMessageForApp(appInfo: AppName, appStoreVersionInfo: AppStoreVersionInfo) throws -> Message {
         return try Message(
             appName: appInfo.name,
             appVersion: appStoreVersionInfo.version,

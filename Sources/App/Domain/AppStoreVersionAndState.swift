@@ -6,6 +6,11 @@
 //
 
 import Foundation
+import Vapor
+
+protocol AppStoreVersionRepository {
+    func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppStoreVersionAndState
+}
 
 enum AppStoreVersionError: Error {
     case failedToConvertStringToDate(String)

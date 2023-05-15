@@ -7,7 +7,7 @@
 
 import Vapor
 
-class AppStoreVersionRepository {
+class AppStoreVersionRepositoryImpl: AppStoreVersionRepository {
     // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
     func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppStoreVersionAndState {
         let request = AppStoreVersionsRequest(appID: id, token: token)

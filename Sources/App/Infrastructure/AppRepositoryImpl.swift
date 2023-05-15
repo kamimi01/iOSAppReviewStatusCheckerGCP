@@ -12,7 +12,7 @@ enum AppStoreConnectRequestError: Error {
     case cannotGenerateJWT
 }
 
-class AppRepository {
+class AppRepositoryImpl: AppRepository {
     // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
     func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppName {
         let request = AppsRequest(token: token)

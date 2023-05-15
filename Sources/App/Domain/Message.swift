@@ -7,6 +7,11 @@
 
 import Foundation
 
+protocol MessageRepository {
+    func generateMessageForApp(appInfo: AppName, appStoreVersionInfo: AppStoreVersionAndState) throws -> Message
+    func generateMessage(messagesForApp: [Message]) -> String
+}
+
 enum MessageGenerateError: Error {
     case requiredParametersAreNil((appName: String?, appVersion: String?, createdDate: Date?, state: AppStoreState?))
 }

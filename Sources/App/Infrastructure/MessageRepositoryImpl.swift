@@ -5,7 +5,8 @@
 //  Created by mikaurakawa on 2023/04/26.
 //
 
-class MessageRepository {
+class MessageRepositoryImpl: MessageRepository {
+    /// アプリごとの投稿メッセージを生成する
     func generateMessageForApp(appInfo: AppName, appStoreVersionInfo: AppStoreVersionAndState) throws -> Message {
         return try Message(
             appName: appInfo.name,
@@ -15,6 +16,7 @@ class MessageRepository {
         )
     }
 
+    /// 投稿メッセージ全体を生成する
     func generateMessage(messagesForApp: [Message]) -> String {
         var message: String {
             var fullMessage = "iOS アプリのステータスをお知らせします 🍎"

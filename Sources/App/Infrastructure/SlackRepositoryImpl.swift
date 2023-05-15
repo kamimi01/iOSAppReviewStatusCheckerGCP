@@ -11,7 +11,11 @@ enum SlackRepositoryError: Error {
     case unexpectedError(String?)
 }
 
-class SlackRepository {
+protocol SlackRepository {
+    func post(to channelID: String, message: String, req: Vapor.Request) async throws -> PostMessageRequest.Response
+}
+
+class SlackRepositoryImpl: SlackRepository {
     /// Slack にメッセージを投稿する
     func post(to channelID: String, message: String, req: Vapor.Request) async throws -> PostMessageRequest.Response {
         let client = VaporAPIClient(req: req)

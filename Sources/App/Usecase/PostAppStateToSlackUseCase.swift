@@ -55,6 +55,7 @@ class PostAppStateToSlackUseCase {
     /// JWT を生成
     private func generateJWT() -> String? {
         if let token = token {
+            // TODO: 現状の実装だとここに来ることはないので、シングルトンにするなどして改修する必要がある
             req.logger.info("Use created token again")
             return token
         }

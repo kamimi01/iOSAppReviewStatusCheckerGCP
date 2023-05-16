@@ -32,14 +32,13 @@ class PostAppStateToSlackUseCase {
             throw AppStoreConnectRequestError.cannotGenerateJWT
         }
 
-        // TODO: AppRepositoryへのfetchとAppStoreStateRepositoryのfetchは同時実行してOKなので、await を外して並行処理を実施できるように修正したい
         var messages = [Message]()
         for appID in appIDs {
-            let app = try await appRepository.fetch(id: appID, token: jwt, req: req)
+            async let app = try appRepository.fetch(id: appID, token: jwt, req: req)
 
-            let appStoreVersion = try await appStoreVersionRepository.fetch(id: appID, token: jwt, req: req)
+            async let appStoreVersion = try appStoreVersionRepository.fetch(id: appID, token: jwt, req: req)
 
-            let messageForApp = try messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
+            let messageForApp = try await messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
             messages.append(messageForApp)
         }
 

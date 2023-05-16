@@ -9,7 +9,6 @@ import Vapor
 import JWT
 
 class PostAppStateToSlackUseCase {
-    // TODO: リポジトリをDI して使う
     private let appRepository: AppRepository
     private let appStoreVersionRepository: AppStoreVersionRepository
     private let slackRepository: SlackRepository

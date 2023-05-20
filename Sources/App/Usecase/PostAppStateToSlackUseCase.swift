@@ -33,13 +33,21 @@ class PostAppStateToSlackUseCase {
         }
 
         var messages = [Message]()
-        for appID in appIDs {
-            async let app = try appRepository.fetch(id: appID, token: jwt, req: req)
+        // ループの要素を並列に同時実行することで、API レスポンスを短くしている
+        try await withThrowingTaskGroup(of: Message.self) { group in
+            for appID in appIDs {
+                group.addTask {
+                    async let app = try self.appRepository.fetch(id: appID, token: jwt, req: self.req)
 
-            async let appStoreVersion = try appStoreVersionRepository.fetch(id: appID, token: jwt, req: req)
+                    async let appStoreVersion = try self.appStoreVersionRepository.fetch(id: appID, token: jwt, req: self.req)
 
-            let messageForApp = try await messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
-            messages.append(messageForApp)
+                    let messageForApp = try await self.messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
+                    return messageForApp
+                }
+            }
+            for try await message in group {
+                messages.append(message)
+            }
         }
 
         let postMessage = messageRepository.generateMessage(messagesForApp: messages)

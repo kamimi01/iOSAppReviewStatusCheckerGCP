@@ -41,13 +41,10 @@ class PostAppStateToSlackUseCase {
 
                     async let appStoreVersion = try self.appStoreVersionRepository.fetch(id: appID, token: jwt, req: self.req)
 
-                    let messageForApp = try await self.messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
-                    return messageForApp
+                    return try await self.messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)
                 }
             }
-            for try await message in group {
-                messages.append(message)
-            }
+            messages = try await group.reduce(into: [Message]()) { $0.append($1) }
         }
 
         let postMessage = messageRepository.generateMessage(messagesForApp: messages)

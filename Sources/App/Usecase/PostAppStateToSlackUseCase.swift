@@ -58,13 +58,8 @@ class PostAppStateToSlackUseCase {
     }
 
     /// JWT を生成
+    // TODO: JWTをメモリキャッシュして再利用するようにしたい
     private func generateJWT() -> String? {
-        if let token = token {
-            // TODO: 現状の実装だとここに来ることはないので、シングルトンにするなどして改修する必要がある
-            req.logger.info("Use created token again")
-            return token
-        }
-
         guard let issuerID = Environment.get("ISSUER_ID"),
               let privateKey = Environment.get("PRIVATE_KEY"),
               let keyIDString = Environment.get("KEY_ID")

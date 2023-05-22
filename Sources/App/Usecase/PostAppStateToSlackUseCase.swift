@@ -38,7 +38,6 @@ class PostAppStateToSlackUseCase {
             for appID in appIDs {
                 group.addTask {
                     async let app = try self.appRepository.fetch(id: appID, token: jwt, req: self.req)
-
                     async let appStoreVersion = try self.appStoreVersionRepository.fetch(id: appID, token: jwt, req: self.req)
 
                     return try await self.messageRepository.generateMessageForApp(appInfo: app, appStoreVersionInfo: appStoreVersion)

@@ -18,7 +18,7 @@ class PostAppStateToSlackUseCase {
     private let app: Application
     private let req: Vapor.Request
 
-    init(appRepository: AppRepository = AppRepositoryImpl(), appStoreVersionRepository: AppStoreVersionRepository = AppStoreVersionRepositoryImpl(), slackRepository: SlackRepository = SlackRepositoryImpl(), messageRepository: MessageRepository = MessageRepositoryImpl(), app: Application, req: Vapor.Request) {
+    init(appRepository: AppRepository, appStoreVersionRepository: AppStoreVersionRepository, slackRepository: SlackRepository, messageRepository: MessageRepository, app: Application, req: Vapor.Request) {
         self.appRepository = appRepository
         self.appStoreVersionRepository = appStoreVersionRepository
         self.slackRepository = slackRepository

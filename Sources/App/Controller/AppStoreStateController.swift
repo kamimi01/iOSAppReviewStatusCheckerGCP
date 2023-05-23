@@ -12,7 +12,7 @@ class AppStoreStateController {
 
     // TODO: usecaseを外からDIできるようにしたい
     init(app: Application, req: Vapor.Request) {
-        self.usecase = PostAppStateToSlackUseCase(app: app, req: req)
+        self.usecase = PostAppStateToSlackUseCase(appRepository: AppRepositoryImpl(), appStoreVersionRepository: AppStoreVersionRepositoryImpl(), slackRepository: SlackRepositoryImpl(), messageRepository: MessageRepositoryImpl(), app: app, req: req)
     }
 
     func postAppStoreState(req: Vapor.Request) async throws -> PostAppStateToSlackDTO {

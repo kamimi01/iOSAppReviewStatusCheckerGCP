@@ -15,7 +15,6 @@ enum AppStoreConnectRequestError: Error {
 class AppRepositoryImpl: AppRepository {
     private var cache: AppsRequest.Response?
 
-    // TODO: tokenは引数から無くして、このメソッドの内部で生成するようにしたい
     func fetch(id: String, token: String, req: Vapor.Request) async throws -> AppName {
         
         var result: AppsRequest.Response?

@@ -8,7 +8,7 @@
 import Vapor
 import JWT
 
-class PostAppStateToSlackUseCase {
+class PostAppStateToSlackUseCaseImpl {
     private let appRepository: AppRepository
     private let appStoreVersionRepository: AppStoreVersionRepository
     private let slackRepository: SlackRepository

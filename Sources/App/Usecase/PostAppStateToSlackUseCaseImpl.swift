@@ -8,7 +8,11 @@
 import Vapor
 import JWT
 
-class PostAppStateToSlackUseCaseImpl {
+protocol PostAppStateToSlackUseCase {
+    func postAppStateToSlack(appIDs: [String], channelID: String) async throws -> PostAppStateToSlackDTO
+}
+
+class PostAppStateToSlackUseCaseImpl: PostAppStateToSlackUseCase {
     private let appRepository: AppRepository
     private let appStoreVersionRepository: AppStoreVersionRepository
     private let slackRepository: SlackRepository

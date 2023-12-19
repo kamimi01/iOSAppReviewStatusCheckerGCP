@@ -1,6 +1,6 @@
 # iOSAppStatusChecker
 
-App Store Connect 上での iOS アプリのステータスをチェックし、Slack に投稿する API
+API that checks the review submission status of iOS apps on App Store Connect and posts it to Slack.（App Store Connect 上での iOS アプリのレビュー提出ステータスをチェックし、Slack に投稿する API）
 
 ## システム概念図
 
